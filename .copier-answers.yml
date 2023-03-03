@@ -1,0 +1,10 @@
+# Changes here will be overwritten by Copier
+_commit: v1.0.4
+_src_path: gh:myrontuttle/python-copier-template
+author_email: myrongt@gmail.com
+author_name: Myron Tuttle
+minimal_python_version: '3.9'
+package_name: pyprogen
+project_description: Python Project Generator
+project_name: pyprogen
+software_license: MIT License

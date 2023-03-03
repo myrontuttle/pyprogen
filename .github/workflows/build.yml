@@ -1,0 +1,45 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4.5.0
+      with:
+        python-version: 3.9
+
+    - name: Set up PDM
+      uses: pdm-project/setup-pdm@v3
+      with:
+        python-version: 3.9
+
+    - name: Resolve dependencies
+      run: pdm lock -v
+
+    - name: Install dev dependencies
+      run: pdm install -G docs -G quality -G typing -G security -G tests
+
+    - name: Run style checks
+      run: |
+        make check-codestyle
+
+    - name: Run security checks
+      run: |
+        make check-security
+
+    - name: Run tests
+      run: |
+        make test
+
+    # Upload coverage to codecov: https://codecov.io/
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
