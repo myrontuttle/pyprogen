@@ -28,7 +28,7 @@ jobs:
 
     - name: Run style checks
       run: |
-        make check-codestyle
+        make check-style
 
     - name: Run security checks
       run: |
