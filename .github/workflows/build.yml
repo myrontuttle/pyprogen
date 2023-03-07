@@ -20,23 +20,12 @@ jobs:
       with:
         python-version: 3.9
 
-    - name: Resolve dependencies
-      run: pdm lock -v
+    - name: Install dependencies
+      run: pdm sync
 
-    - name: Install dev dependencies
-      run: pdm install -G docs -G quality -G typing -G security -G tests
-
-    - name: Run style checks
+    - name: Run all checks
       run: |
-        make check-codestyle
-
-    - name: Run security checks
-      run: |
-        make check-security
-
-    - name: Run tests
-      run: |
-        make test
+        make check-all
 
     # Upload coverage to codecov: https://codecov.io/
     - name: Upload coverage to Codecov
