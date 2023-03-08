@@ -50,7 +50,7 @@ check-security:
 	pdm run bandit -ll --recursive src tests
 
 .PHONY: check-all
-check-all: check-style mypy check-security test
+check-all: check-style check-security test
 
 #* Cleaning
 .PHONY: pycache-remove

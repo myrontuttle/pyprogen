@@ -25,7 +25,9 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [
+    "pygithub>=1.58.0",
+]
 
 [tool.pdm]
 version = {source = "scm"}
