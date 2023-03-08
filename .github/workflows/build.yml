@@ -23,9 +23,17 @@ jobs:
     - name: Install dependencies
       run: pdm sync
 
-    - name: Run all checks
+    - name: Check style
       run: |
-        make check-all
+        make check-style
+
+    - name: Check security
+      run: |
+        make check-security
+
+    - name: Unit Test
+      run: |
+        make unit-test
 
     # Upload coverage to codecov: https://codecov.io/
     - name: Upload coverage to Codecov

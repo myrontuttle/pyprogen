@@ -31,8 +31,16 @@ format:
 	pdm run ruff check . --fix
 
 #* Testing
-.PHONY: test
-test:
+.PHONY: unit-test
+unit-test:
+	PYTHONPATH=$(PYTHONPATH)/src pdm run pytest -c pyproject.toml --cov-report=html --cov=src tests/unit/
+
+.PHONY: integration-test
+integration-test:
+	PYTHONPATH=$(PYTHONPATH)/src pdm run pytest -c pyproject.toml --cov-report=html --cov=src tests/integration
+
+.PHONY: all-test
+all-test:
 	PYTHONPATH=$(PYTHONPATH)/src pdm run pytest -c pyproject.toml --cov-report=html --cov=src tests/
 
 .PHONY: check-style
@@ -50,7 +58,7 @@ check-security:
 	pdm run bandit -ll --recursive src tests
 
 .PHONY: check-all
-check-all: check-style check-security test
+check-all: check-style check-security all-test
 
 #* Cleaning
 .PHONY: pycache-remove

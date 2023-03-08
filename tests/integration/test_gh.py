@@ -3,7 +3,7 @@ from github import Repository
 from pyprogen import gh
 
 
-def test_create_delete_repo():
+def test_create_project():
     """
     Test that we can create a repo
     """

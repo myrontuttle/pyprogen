@@ -72,7 +72,7 @@ repos:
       - id: pytest-check
         name: pytest-check
         description: Run unit tests with pytest.
-        entry: make test
+        entry: make unit-test
         language: system
         pass_filenames: false
         always_run: true
