@@ -26,11 +26,14 @@ def get_gh_token_from_env() -> Optional[str]:
     return os.getenv("GH_TOKEN")
 
 
-def create_repo(name: str, desc: str) -> Repository:
+def create_repo(name: str, desc: str) -> Optional[Repository.Repository]:
     """
     Create a Github repo
     """
     token = get_gh_token_from_env()
+    if not token:
+        return None
+
     g = Github(token)
     template_repo = g.get_repo(template_name)
     user = g.get_user()
