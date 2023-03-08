@@ -51,12 +51,13 @@ quality = [
     "pre-commit>=3.0.4",
     "ruff>=0.0.252",
 ]
-tests = [
+test = [
     "pytest>=6.2",
     "pytest-cov>=3.0",
     "coverage[toml]>=7.2.0",
     "pytest-randomly>=3.10",
     "pytest-xdist>=2.4",
+    "editables>=0.3",
 ]
 typing = [
     "mypy>=0.910",
