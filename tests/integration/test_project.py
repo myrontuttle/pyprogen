@@ -12,13 +12,16 @@ def test_create_project():
     """
     name = "pyprogen_test_repo"
     desc = "[Delete me]. I'm a test repo for pyprogen"
+    py_ver = "3.9"
+
     repo = gh.create_repo(name, desc)
     assert repo == f"{owner}/{name}"
-    time.sleep(1)  # Make sure repo is ready at GitHub
+    time.sleep(2)  # Make sure repo is ready at GitHub
     cs_id = gh.create_codespace(repo)
-    time.sleep(5)  # Make sure codespace is ready at GitHub
+    time.sleep(6)  # Make sure codespace is ready at GitHub
+    # gh.ssh_cs_config(cs_id)
+    gh.setup_project(cs_id, name, desc, py_ver)
+
     gh.stop_codespace(cs_id)
-
     gh.delete_repo(f"{owner}/{name}")
-
     assert cs_id
