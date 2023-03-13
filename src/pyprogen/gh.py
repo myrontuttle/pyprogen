@@ -6,8 +6,6 @@ import subprocess
 from pathlib import Path
 from urllib.parse import urlparse
 
-from fabric import Config, Connection
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -213,7 +211,7 @@ def setup_project(
         capture_output=True,
     )
     if cp_ssh.returncode == 0:
-        result_1 = subprocess.run(
+        subprocess.run(
             [
                 "gh",
                 "cs",
@@ -227,28 +225,14 @@ def setup_project(
             ],
             capture_output=True,
         )
-        return result_1.stdout.decode("UTF-8")
     else:
         logger.error(cp_ssh.stderr)
-
-
-def setup_project_on_cs(
-    host: str, project_name: str, project_desc: str, py_ver: str
-):
-    """
-    Run commands to setup project on codespace
-    """
-    gh_token = get_gh_token_from_env()
-    if not gh_token:
-        return ""
-    conf = Config(runtime_ssh_path=f"{Path.home()}/.ssh/codespaces")
-    c = Connection(host, config=conf)
-    c.run(f"export GH_TOKEN={gh_token}")
-    c.run("gh extension install twelvelabs/gh-repo-config")
-    c.run("gh repo-config apply")
-    c.run(
-        f"copier gh:"
-        f"{cp_template_name} ./ --data \"minimal_python_version='"
-        f"{py_ver}'\" --data \"project_name='{project_name}'\" "
-        f"--data \"project_description='{project_desc}'\" --force"
+    cp_ssh = subprocess.run(
+        [
+            "copier gh:",
+            f"{cp_template_name} ./ --data \"minimal_python_version='",
+            f"{py_ver}'\" --data \"project_name='{project_name}'\" ",
+            f"--data \"project_description='{project_desc}'\" --force",
+        ],
+        capture_output=True,
     )
