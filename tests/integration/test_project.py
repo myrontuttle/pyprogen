@@ -20,8 +20,8 @@ def test_create_project():
     cs_id = gh.create_codespace(repo)
     time.sleep(6)  # Make sure codespace is ready at GitHub
     # gh.ssh_cs_config(cs_id)
+    gh.configure_project(cs_id, name, desc)
     gh.setup_project(cs_id, name, desc, py_ver)
-
     gh.stop_codespace(cs_id)
     gh.delete_repo(f"{owner}/{name}")
     assert cs_id

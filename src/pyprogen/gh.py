@@ -185,12 +185,12 @@ def ssh_cs_config(cs_id: str) -> Optional[str]:
         logger.error(cp_ssh.stderr)
 
 
-def setup_project(
-    cs_id: str, project_name: str, project_desc: str, py_ver: str
+def configure_project(
+    cs_id: str, project_name: str, project_desc: str
 ) -> Optional[str]:
     """
-    Use Github CLI to setup project in the codespace with the id provided
-    gh codespace ssh -c [<cs_id>] {command}
+    Use Github CLI to configure project in the codespace with the id provided
+    gh codespace ssh -c [<cs_id>] {command} {command}
     """
     if not cs_id:
         logger.error("No codespace id provided to setup project.")
@@ -205,34 +205,60 @@ def setup_project(
             "ssh",
             "-c",
             cs_id,
-            '"export"',
-            f'"GH_TOKEN={gh_token}"',
-        ],
+        ]
+        + [f"export GH_TOKEN={gh_token}"]
+        + ["&& gh extension install twelvelabs/gh-repo-config"]
+        + [f"&& cd ../../workspaces/{project_name}"]
+        + ["&& gh repo-config apply"]
+        + [f'&& gh repo edit -d "{project_desc}"']
+        + [f"&& gh auth setup-git -h {github_host}"],
         capture_output=True,
     )
     if cp_ssh.returncode == 0:
-        subprocess.run(
-            [
-                "gh",
-                "cs",
-                "ssh",
-                "-c",
-                cs_id,
-                '"gh"',
-                '"extension"',
-                '"install"',
-                '"twelvelabs/gh-repo-config"',
-            ],
-            capture_output=True,
-        )
+        return cp_ssh.stdout.decode("UTF-8")
     else:
         logger.error(cp_ssh.stderr)
+
+
+def setup_project(
+    cs_id: str,
+    project_name: str,
+    project_desc: str,
+    python_version: str,
+) -> Optional[str]:
+    """
+    Use Github CLI to setup project in the codespace with the id provided
+    gh codespace ssh -c [<cs_id>] {command}
+    """
+    if not cs_id:
+        logger.error("No codespace id provided to setup project.")
+        return None
+    gh_token = get_gh_token_from_env()
+    if not gh_token:
+        return None
+    description = project_desc.replace("'", "")
+    # TODO: Figure out how to allow apostrophes in project description
     cp_ssh = subprocess.run(
         [
-            "copier gh:",
-            f"{cp_template_name} ./ --data \"minimal_python_version='",
-            f"{py_ver}'\" --data \"project_name='{project_name}'\" ",
-            f"--data \"project_description='{project_desc}'\" --force",
-        ],
+            "gh",
+            "cs",
+            "ssh",
+            "-c",
+            cs_id,
+        ]
+        + [f"cd ../../workspaces/{project_name}"]
+        + [
+            f"&& copier gh:{cp_template_name} ./ "
+            f"--data \"project_name='{project_name}'\" "
+            f"--data \"project_description='{description}'\" "
+            f"--data \"minimal_python_version='{python_version}'\" "
+            f"--force"
+        ]
+        + [f"&& export GH_TOKEN={gh_token}"]
+        + ["&& git push origin main"],
         capture_output=True,
     )
+    if cp_ssh.returncode == 0:
+        return cp_ssh.stdout.decode("UTF-8")
+    else:
+        logger.error(cp_ssh.stderr)
