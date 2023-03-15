@@ -28,6 +28,7 @@ def create_project(
     gh.configure_project(cs_id, project_name, description)
     click.echo("Populating project")
     gh.setup_project(cs_id, project_name, description, python_version)
+    gh.stop_codespace(cs_id)
     git_repo = f"git@github.com:{repo}.git"
     click.echo(f"Project available at: {repo_url} and {git_repo}")
 
