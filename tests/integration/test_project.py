@@ -14,7 +14,8 @@ def test_create_project():
     desc = "[Delete me]. I'm a test repo for pyprogen"
     py_ver = "3.9"
 
-    repo = gh.create_repo(name, desc)
+    repo_url = gh.create_repo(name, desc)
+    repo = gh.repo_name_from_url(repo_url)
     assert repo == f"{owner}/{name}"
     time.sleep(2)  # Make sure repo is ready at GitHub
     cs_id = gh.create_codespace(repo)

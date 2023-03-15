@@ -56,14 +56,14 @@ def create_repo(name: str, desc: str) -> Optional[str]:
         capture_output=True,
     )
     if cp_create.returncode == 0:
-        return repo_name_from_url(cp_create.stdout)
+        return cp_create.stdout.decode("UTF-8")
     else:
         logger.error(cp_create.stderr)
         return None
 
 
-def repo_name_from_url(url: bytes) -> str:
-    return urlparse(url.decode("UTF-8")).path.strip("/")
+def repo_name_from_url(url: str) -> str:
+    return urlparse(url).path.strip("/")
 
 
 def delete_repo(name: str) -> None:

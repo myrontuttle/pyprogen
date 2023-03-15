@@ -17,6 +17,6 @@ def test_get_gh_token_from_env(caplog):
 
 
 def test_repo_name_from_url():
-    url = b"https://github.com/myrontuttle/test\n"
+    url = "https://github.com/myrontuttle/test"
     repo_name = gh.repo_name_from_url(url)
     assert repo_name == "myrontuttle/test"
