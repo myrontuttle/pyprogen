@@ -19,6 +19,12 @@ def create_project(
     """
     click.echo("Creating Repo")
     repo_url = gh.create_repo(project_name, description)
+    if not repo_url:
+        click.echo(
+            "Failed to create repo. If repo already exists "
+            f"run: gh repo delete {project_name} --yes"
+        )
+        return
     repo = gh.repo_name_from_url(repo_url)
     time.sleep(2)  # Make sure repo is ready at GitHub
     click.echo("Creating Codespace")
@@ -27,7 +33,7 @@ def create_project(
     click.echo("Configuring project")
     gh.configure_project(cs_id, project_name, description)
     click.echo("Populating project")
-    gh.setup_project(cs_id, project_name, description, python_version)
+    gh.populate_project(cs_id, project_name, description, python_version)
     gh.stop_codespace(cs_id)
     git_repo = f"git@github.com:{repo}.git"
     click.echo(f"Project available at: {repo_url} and {git_repo}")

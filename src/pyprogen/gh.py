@@ -220,14 +220,14 @@ def configure_project(
         logger.error(cp_ssh.stderr)
 
 
-def setup_project(
+def populate_project(
     cs_id: str,
     project_name: str,
     project_desc: str,
     python_version: str,
 ) -> Optional[str]:
     """
-    Use Github CLI to setup project in the codespace with the id provided
+    Use Github CLI to populate project in the codespace with the id provided
     gh codespace ssh -c [<cs_id>] {command}
     """
     if not cs_id:
