@@ -251,7 +251,7 @@ def populate_project(
             f"&& copier gh:{cp_template_name} ./ "
             f'--data "project_name={project_name}" '
             f'--data "project_description={description}" '
-            f'--data "minimal_python_version={python_version}" '
+            f"--data \"minimal_python_version='{python_version}'\" "
             f"--force"
         ]
         + [f"&& export GH_TOKEN={gh_token}"]
