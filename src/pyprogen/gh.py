@@ -248,11 +248,11 @@ def populate_project(
         ]
         + [f"cd ../../workspaces/{project_name}"]
         + [
-            f"&& copier gh:{cp_template_name} ./ "
+            f"&& copier copy gh:{cp_template_name} ./ "
             f'--data "project_name={project_name}" '
             f'--data "project_description={description}" '
             f'--data "minimal_python_version={python_version}" '
-            f"--force"
+            f"--force --UNSAFE"
         ]
         + [f"&& export GH_TOKEN={gh_token}"]
         + ["&& git push origin main"],
